@@ -79,7 +79,6 @@ int stringTokenizer(std::string_view source) {
   }
 
   std::string token = leftResult + rightResult;
-  std::cout << token << std::endl;
   return std::stoi(token);
 }
 
