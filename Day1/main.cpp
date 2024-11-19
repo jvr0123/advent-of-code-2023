@@ -11,16 +11,17 @@ static const std::set<char> sValidTokens{'1', '2', '3', '4', '5',
 static const std::array<std::string, 9> sValidTokenStrings{
     "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
 static const std::map<std::string, std::string> sStringLookup{
-    {"one", "1"}, {"two", "2"},   {"three", "3"}, {"four", "4"}, {"five", "5"},
-    {"six", "6"}, {"seven", "7"}, {"eight", "8"}, {"nine", "9"}};
+    {"one", "1"}, {"two", "2"}, {"three", "3"}, {"four", "4"}, {"five", "5"}, {"six", "6"}, {"seven", "7"}, {"eight", "8"}, {"nine", "9"}};
 
 // assume inputs are well-formed
-int tokenizer(std::string_view source) {
+int tokenizer(std::string_view source)
+{
   auto left{source.cbegin()};
   auto right{source.crbegin()};
 
   // check if both keys are in the token set
-  while (sValidTokens.count(*left) == 0 || sValidTokens.count(*right) == 0) {
+  while (sValidTokens.count(*left) == 0 || sValidTokens.count(*right) == 0)
+  {
     if (sValidTokens.count(*left) == 0)
       ++left;
     if (sValidTokens.count(*right) == 0)
@@ -33,16 +34,20 @@ int tokenizer(std::string_view source) {
   return std::stoi(token);
 }
 
-std::string checkCollision(std::string_view str) {
-  for (auto token : sValidTokenStrings) {
-    if (str.find(token) != std::string_view::npos) {
+std::string checkCollision(std::string_view str)
+{
+  for (auto token : sValidTokenStrings)
+  {
+    if (str.find(token) != std::string_view::npos)
+    {
       return token;
     }
   }
   return "";
 }
 // assume inputs are well-formed
-int stringTokenizer(std::string_view source) {
+int stringTokenizer(std::string_view source)
+{
   auto left{source.cbegin()};
   auto right{source.crbegin()};
 
@@ -53,22 +58,29 @@ int stringTokenizer(std::string_view source) {
   bool leftFound{false}, rightFound{false};
 
   // check if both keys are in the token set
-  while (!leftFound || !rightFound) {
+  while (!leftFound || !rightFound)
+  {
 
     leftSoFar += *left;
-    if (checkCollision(leftSoFar) != "") {
+    if (checkCollision(leftSoFar) != "")
+    {
       leftFound = true;
       leftResult = sStringLookup.at(checkCollision(leftSoFar));
-    } else if (sValidTokens.count(*left) != 0 && !leftFound) {
+    }
+    else if (sValidTokens.count(*left) != 0 && !leftFound)
+    {
       leftFound = true;
       leftResult = *left;
     }
 
     rightSoFar = *right + rightSoFar;
-    if (checkCollision(rightSoFar) != "") {
+    if (checkCollision(rightSoFar) != "")
+    {
       rightFound = true;
       rightResult = sStringLookup.at(checkCollision(rightSoFar));
-    } else if (sValidTokens.count(*right) != 0 && !rightFound) {
+    }
+    else if (sValidTokens.count(*right) != 0 && !rightFound)
+    {
       rightFound = true;
       rightResult = *right;
     }
@@ -82,12 +94,19 @@ int stringTokenizer(std::string_view source) {
   return std::stoi(token);
 }
 
-int main() {
+int main()
+{
   std::fstream input("input");
+  if (!input)
+  {
+    std::cerr << "Failed to open input file.\n";
+    return 1;
+  }
   std::string line{};
   int count1{}, count2{};
 
-  while (getline(input, line)) {
+  while (getline(input, line))
+  {
     count1 += tokenizer(line);
     count2 += stringTokenizer(line);
   }
